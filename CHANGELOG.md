@@ -1,5 +1,10 @@
 # 📝 CHANGELOG
 
+## [0.1.1] - 2026-05-12
+### ✨ Añadido
+- **Compilación de Producción**: Generación del binario optimizado en modo `--release`.
+- **Integración con MangoWC**: Configuración del autostart del compositor para usar RustBar en lugar de Waybar.
+
 ## [0.1.0] - 2026-05-12
 
 ### ✨ Añadido
