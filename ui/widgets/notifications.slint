@@ -1,0 +1,171 @@
+export struct Notification {
+    title: string,
+    body: string,
+    time: string,
+    id: int,
+}
+
+component NotificationItem inherits Rectangle {
+    in property <string> title;
+    in property <string> body;
+    in property <string> time;
+    callback dismiss();
+
+    background: rgba(41, 46, 66, 0.4);
+    border-radius: 8px;
+    height: 60px;
+
+    HorizontalLayout {
+        padding: 10px;
+        spacing: 10px;
+        
+        VerticalLayout {
+            alignment: center;
+            spacing: 2px;
+            Text {
+                text: root.title;
+                font-size: 13px;
+                font-weight: 700;
+                color: #7aa2f7;
+                overflow: elide;
+            }
+            Text {
+                text: root.body;
+                font-size: 11px;
+                color: #c0caf5;
+                overflow: elide;
+            }
+        }
+        
+        Rectangle { width: 1px; } // Spacer
+
+        VerticalLayout {
+            alignment: center;
+            spacing: 5px;
+            Text {
+                text: root.time;
+                font-size: 10px;
+                color: #565f89;
+                horizontal-alignment: right;
+            }
+            TouchArea {
+                width: 20px;
+                height: 20px;
+                clicked => { root.dismiss(); }
+                Text {
+                    text: "󰅖";
+                    font-size: 14px;
+                    color: #f7768e;
+                }
+            }
+        }
+    }
+}
+
+export component NotificationTray inherits Rectangle {
+    width: 350px;
+    height: 400px;
+    background: transparent;
+
+    in property <[Notification]> notifications: [];
+    callback clear_all();
+    callback dismiss_notif(int);
+
+    Rectangle {
+        width: 100%;
+        height: 100%;
+        background: rgba(26, 27, 38, 0.95);
+        border-radius: 12px;
+        border-width: 1px;
+        border-color: rgba(122, 162, 247, 0.3);
+
+        VerticalLayout {
+            padding: 15px;
+            spacing: 10px;
+
+            HorizontalLayout {
+                alignment: space-between;
+                Text {
+                    text: "Notificaciones";
+                    font-size: 16px;
+                    font-weight: 800;
+                    color: #bb9af7;
+                }
+                TouchArea {
+                    clicked => { root.clear_all(); }
+                    Text {
+                        text: "Limpiar todo";
+                        font-size: 12px;
+                        color: #f7768e;
+                        vertical-alignment: center;
+                    }
+                }
+            }
+
+            Rectangle { height: 1px; background: rgba(86, 95, 137, 0.3); }
+
+            if (notifications.length == 0) : Text {
+                text: "No hay notificaciones";
+                color: #565f89;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                font-italic: true;
+            }
+
+            Flickable {
+                viewport-height: (root.notifications.length * 70px);
+                VerticalLayout {
+                    spacing: 8px;
+                    alignment: start;
+                    for notif[i] in root.notifications : NotificationItem {
+                        title: notif.title;
+                        body: notif.body;
+                        time: notif.time;
+                        dismiss => { root.dismiss_notif(notif.id); }
+                    }
+                }
+            }
+        }
+    }
+}
+
+export component BellIcon inherits Rectangle {
+    in property <bool> has-notifications;
+    callback clicked();
+
+    ta := TouchArea {
+        width: 60px;
+        clicked => { root.clicked(); }
+        
+        Rectangle {
+            width: 100%; height: 100%;
+            background: ta.has-hover ? rgba(187, 154, 247, 0.1) : transparent;
+            border-radius: 8px;
+            animate background { duration: 200ms; }
+
+            Text {
+                text: "󰂚";
+                font-size: 20px;
+                color: root.has-notifications ? #ffffff : #bb9af7;
+                vertical-alignment: center;
+                horizontal-alignment: center;
+                animate color { duration: 200ms; }
+            }
+
+            if (root.has-notifications) : Rectangle {
+                width: 8px; height: 8px;
+                background: #f7768e;
+                border-radius: 4px;
+                x: parent.width / 2 + 6px;
+                y: parent.height / 2 - 10px;
+                
+                Rectangle {
+                    width: 12px; height: 12px;
+                    background: rgba(247, 118, 142, 0.4);
+                    border-radius: 6px;
+                    x: -2px; y: -2px;
+                }
+            }
+        }
+    }
+}

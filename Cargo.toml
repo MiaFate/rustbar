@@ -1,0 +1,13 @@
+[package]
+name = "rustbar"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+slint = { version = "1.16", features = ["backend-winit-wayland"] }
+layer-shika = "0.3.1"
+zbus = "4.4"
+tokio = { version = "1.0", features = ["full"] }
+futures-util = "0.3"
+chrono = "0.4"
+slint-interpreter = "1.16"

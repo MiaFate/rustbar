@@ -1,0 +1,13 @@
+export component Clock inherits Rectangle {
+    in property <string> time-text: "--:--:--";
+    
+    background: rgba(158, 206, 106, 0.1);
+    border-radius: 6px;
+    
+    HorizontalLayout {
+        padding: 12px; padding-top: 4px; padding-bottom: 4px;
+        spacing: 8px;
+        Text { text: "󱑂"; font-size: 16px; color: #9ece6a; vertical-alignment: center; }
+        Text { text: root.time-text; font-size: 15px; font-weight: 700; color: #9ece6a; font-family: "JetBrains Mono"; vertical-alignment: center; }
+    }
+}
